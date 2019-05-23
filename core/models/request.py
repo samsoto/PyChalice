@@ -1,11 +1,24 @@
-from datetime import datetime
-from core.utilities import utils
+from core.validators import validator
+from core.models.http_model import HttpModel
+from core.models.field import Field
 
 
-class Request(object):
-    def __init__(self, request: dict):
-        self.id: int = request.get('id')
-        self.start_ts: datetime = utils.parse_datetime(request.get('startTs'))
-        self.end_ts: datetime = utils.parse_datetime(request.get('endTs'))
-        self.offset: int = request.get('offset') or 0
-        self.limit: int = request.get('limit') or 10
+def FieldBuilder(params: dict):
+    def field(data_type, alias: str, default=None) -> Field:
+        return Field(data_type, params.get(alias), alias=alias, default=default)
+    return field
+
+
+class Request:
+
+    def __init__(self, params: dict):
+        field = FieldBuilder(params)
+        self.id = field(int, 'id')
+        self.order_by = field(str, 'orderBy', default='time')
+        self.offset = field(int, 'offset', default=0)
+        self.limit = field(int, 'limit', default=10)
+
+    def validate(self):
+        validator.validate_id(self.id)
+
+

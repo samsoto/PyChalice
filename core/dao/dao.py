@@ -3,14 +3,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.query import Query
-from core.models.request import Request
+from core.models.request2 import Request2
 from core.dao.db_utils import Queryable, SessionFactory
 from sqlalchemy import func
 from typing import List
 from core import config
 
 
-def get_sensor_data(req: Request) -> List[SensorData]:
+def get_sensor_data(req: Request2) -> List[SensorData]:
     activate_query_extensions()
     dbcontext: Session = get_database_context()
     return dbcontext \
